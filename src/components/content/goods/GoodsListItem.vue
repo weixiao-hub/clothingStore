@@ -1,6 +1,6 @@
 <template>
-  <div class="goods-item">
-    <img :src="GoodsItem.show.img" alt="">
+  <div class="goods-item" @click="itemClick">
+    <img v-lazy="showImages" alt="" @load="imgLoad">
     <div class="goods-info">
       <p>{{GoodsItem.title}}</p>
       <span class="price">{{GoodsItem.price}}</span>
@@ -25,6 +25,20 @@
         }
       }
     },
+    computed: {
+      showImages() {
+        return this.GoodsItem.image || this.GoodsItem.show.img
+
+      }
+    },
+    methods: {
+      imgLoad() {
+        this.bus.$emit('imageLoad')
+      },
+      itemClick() {
+        this.$router.push('/detail/' + this.GoodsItem.iid)
+      }
+    },
     components: {
 
     }
@@ -33,7 +47,7 @@
 
 <style scoped>
   .goods-item {
-    
+
     padding-bottom: 40px;
     position: relative;
     width: 48%;
@@ -60,9 +74,11 @@
     white-space: nowrap;
     margin-bottom: 3px;
   }
+
   .goods-info span {
     font-size: 12px;
   }
+
   .goods-info .price {
     color: var(--color-high-text);
     margin-right: 20px;

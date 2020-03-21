@@ -3,7 +3,7 @@
     <swiper>
       <swiper-item v-for="item in banners">
         <a :href="item.link">
-          <img :src="item.image" alt="">
+          <img :src="item.image" alt="" @load="imageLoad">
         </a>
       </swiper-item>
     </swiper>
@@ -16,7 +16,7 @@
     name: "homeSwiper",
     data() {
       return {
-        
+        isLoad: false
       }
     },
     props: {
@@ -24,6 +24,15 @@
         type: Array,
         default() {
           return []
+        }
+      }
+    },
+    methods: {
+      imageLoad() {
+        // 只需要有一张图片加载完成
+        if(!this.isLoad) {
+          this.$emit('swiperImageLoad')
+          this.isLoad = true
         }
       }
     },
